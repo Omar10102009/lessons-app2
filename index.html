@@ -5,50 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#4f46e5">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="الدروس">
+<meta name="apple-mobile-web-app-title" content="جدول الدروس">
 <link rel="manifest" href="manifest.json">
-<title>منظم الدروس</title>
+<title>جدول الدروس</title>
 <style>
   :root{
-    --primary:#4f46e5; --primary-dark:#4338ca;
-    --bg:#f1f5f9; --card:#fff; --text:#0f172a; --muted:#64748b;
+    --primary:#4f46e5; --bg:#f1f5f9; --card:#fff; --text:#0f172a; --muted:#64748b;
     --success:#10b981; --warning:#f59e0b; --danger:#ef4444; --border:#e2e8f0;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:-apple-system,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);padding-bottom:120px}
+  body{font-family:-apple-system,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);padding-bottom:100px}
   header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:26px 20px 30px;border-radius:0 0 26px 26px;box-shadow:0 8px 24px -8px rgba(79,70,229,.5)}
   header h1{font-size:22px;margin-bottom:6px}
   header p{opacity:.9;font-size:14px}
   main{padding:0 16px;max-width:720px;margin:0 auto}
-  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:-40px;margin-bottom:18px}
+  
+  /* التنبيهات */
+  .alert-banner{background:#fee2e2;color:#991b1b;padding:12px;border-radius:12px;margin-top:-20px;margin-bottom:16px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 4px 10px -4px rgba(0,0,0,.1)}
+  
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:-20px;margin-bottom:18px}
   .stat{background:#fff;padding:16px 12px;border-radius:16px;text-align:center;box-shadow:0 4px 12px -4px rgba(0,0,0,.08)}
-  .stat .num{display:block;font-size:22px;font-weight:700;color:var(--primary)}
+  .stat .num{display:block;font-size:20px;font-weight:700;color:var(--primary)}
   .stat .lbl{font-size:12px;color:var(--muted)}
+  
   .card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 12px -4px rgba(0,0,0,.08);border:1px solid var(--border);position:relative;overflow:hidden}
   .card::before{content:'';position:absolute;top:0;right:0;width:5px;height:100%;background:var(--success)}
   .card.low::before{background:var(--warning)}
   .card.done::before{background:var(--danger)}
-  .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  
+  .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
   .card-head h3{font-size:17px}
   .del{background:none;border:none;font-size:16px;cursor:pointer;padding:4px}
-  .progress{background:#eef2ff;height:10px;border-radius:999px;overflow:hidden;margin:6px 0}
-  .bar{height:100%;background:linear-gradient(90deg,#4f46e5,#7c3aed);border-radius:999px;transition:.3s}
-  .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
-  .row{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
-  .badge{padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600}
-  .badge.ok{background:#dcfce7;color:#166534}
-  .badge.low{background:#fef3c7;color:#92400e}
-  .badge.done{background:#fee2e2;color:#991b1b}
-  .price{font-size:13px;color:var(--muted)}
-  .pay{background:#f8fafc;padding:10px;border-radius:10px;font-size:13px;margin-top:8px;line-height:1.7}
+  
+  /* الدوائر بتاعة الحصص */
+  .circles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:var(--muted);transition:.2s}
+  .circle.active{background:var(--primary);border-color:var(--primary);color:#fff;transform:scale(1.1)}
+  
+  .meta{font-size:13px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
+  .pay{background:#f8fafc;padding:10px;border-radius:10px;font-size:13px;margin-top:8px;line-height:1.8}
   .pay .due{color:var(--danger);font-weight:600}
   .pay .paid{color:var(--success);font-weight:600}
-  .pay .last{color:var(--muted);font-size:12px}
+  
   .actions{display:flex;gap:8px;margin-top:12px}
   .actions button{flex:1;padding:10px;border:none;border-radius:10px;background:#eef2ff;color:var(--primary);font-weight:600;cursor:pointer;font-size:13px}
   .actions button:hover{background:#e0e7ff}
-  .empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:15px}
-  .fab{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;width:64px;height:64px;border-radius:50%;font-size:32px;cursor:pointer;box-shadow:0 8px 20px -4px rgba(79,70,229,.6);z-index:50;display:flex;align-items:center;justify-content:center;line-height:1}
+  
+  .fab{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;width:64px;height:64px;border-radius:50%;font-size:32px;cursor:pointer;box-shadow:0 8px 20px -4px rgba(79,70,229,.6);z-index:50;display:flex;align-items:center;justify-content:center}
+  
   .modal{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:100;backdrop-filter:blur(4px)}
   .modal.show{display:flex}
   .modal-content{background:#fff;border-radius:20px;padding:22px;width:100%;max-width:420px;animation:pop .2s ease}
@@ -56,36 +60,40 @@
   .modal-content h2{margin-bottom:16px;font-size:18px}
   .field{margin-bottom:14px}
   .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
-  .field input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;transition:.2s}
-  .field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+  .field input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit}
+  .field input:focus{outline:none;border-color:var(--primary)}
   .modal-actions{display:flex;gap:10px;margin-top:18px}
   .modal-actions button{flex:1;padding:12px;border-radius:10px;font-weight:600;cursor:pointer;font-size:15px;border:none;font-family:inherit}
   .btn-primary{background:var(--primary);color:#fff}
   .btn-ghost{background:#f1f5f9;color:var(--text)}
+  
+  .empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:15px}
   @media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 <header>
-  <h1>📚 منظم الدروس</h1>
+  <h1>📅 جدول الحصص</h1>
   <p id="today"></p>
 </header>
 
 <main>
+  <div id="alerts"></div>
   <section class="stats" id="stats"></section>
   <section id="lessons"></section>
 </main>
 
 <button class="fab" id="addBtn">+</button>
 
+<!-- مودال إضافة/تعديل الدرس -->
 <div class="modal" id="modal">
   <div class="modal-content">
-    <h2 id="modalTitle">درس جديد</h2>
+    <h2 id="modalTitle">إضافة مادة جديدة</h2>
     <form id="form">
       <input type="hidden" id="mId">
       <div class="field">
-        <label>اسم الدرس / الطالب</label>
-        <input id="mName" placeholder="مثال: رياضيات - أحمد" required>
+        <label>اسم المادة / الدرس</label>
+        <input id="mName" placeholder="مثال: رياضيات" required>
       </div>
       <div class="field">
         <label>عدد الحصص في الشهر</label>
@@ -103,96 +111,152 @@
   </div>
 </div>
 
+<!-- مودال الدفع -->
+<div class="modal" id="payModal">
+  <div class="modal-content">
+    <h2>💰 تسجيل دفعة</h2>
+    <form id="payForm">
+      <input type="hidden" id="pId">
+      <p id="payInfo" style="font-size:14px; color:var(--muted); margin-bottom:12px; line-height:1.6;"></p>
+      <div class="field">
+        <label>المبلغ المدفوع (ج.م)</label>
+        <input id="pAmount" type="number" min="0" step="0.5" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="closePayModal">إلغاء</button>
+        <button type="submit" class="btn-primary">تأكيد الدفع</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
-const KEY = 'lessons_v1';
+const KEY = 'lessons_v2'; // غيرنا الاسم عشان نبدأ نظيف بالدوائر
 let state = JSON.parse(localStorage.getItem(KEY) || '{"lessons":[]}');
 const save = () => localStorage.setItem(KEY, JSON.stringify(state));
 const fmt = n => (Math.round(n*100)/100).toLocaleString('ar-EG') + ' ج.م';
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-function daysLeftInMonth() {
-  const now = new Date();
-  const last = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-  return last - now.getDate();
-}
 
 function renderStats() {
   const totalLessons = state.lessons.length;
-  const totalRemaining = state.lessons.reduce((s,l)=>s+Math.max(0,l.totalSessions-l.usedSessions),0);
+  // حساب إجمالي الحصص اللي فاضلة
+  const totalRemaining = state.lessons.reduce((s,l)=>s+(l.totalSessions - l.attended),0);
+  // إجمالي الفلوس اللي لسه هتتدفع (إجمالي الشهر - المدفوع)
   const totalDue = state.lessons.reduce((s,l)=>{
-    const paid = l.payments.reduce((a,p)=>a+p.amount,0);
-    return s + Math.max(0, l.usedSessions*l.price - paid);
+    const totalMonthPrice = l.totalSessions * l.price;
+    return s + Math.max(0, totalMonthPrice - l.paid);
   },0);
+
   document.getElementById('stats').innerHTML = `
-    <div class="stat"><span class="num">${totalLessons}</span><span class="lbl">درس</span></div>
+    <div class="stat"><span class="num">${totalLessons}</span><span class="lbl">مواد</span></div>
     <div class="stat"><span class="num">${totalRemaining}</span><span class="lbl">حصة متبقية</span></div>
-    <div class="stat"><span class="num">${totalDue.toLocaleString('ar-EG')}</span><span class="lbl">مستحق (ج.م)</span></div>
-    <div class="stat"><span class="num">${daysLeftInMonth()}</span><span class="lbl">يوم للشهر</span></div>`;
+    <div class="stat"><span class="num">${totalDue.toLocaleString('ar-EG')}</span><span class="lbl">متبقي عليه (ج.م)</span></div>
+  `;
+}
+
+function renderAlerts() {
+  let alertsHtml = '';
+  let hasAlert = false;
+  
+  state.lessons.forEach(l => {
+    const remaining = l.totalSessions - l.attended;
+    if (remaining <= 2 && remaining > 0) {
+      alertsHtml += `<div>⚠️ مادة "${l.name}" فاضلها ${remaining} حصص وتخلص!</div>`;
+      hasAlert = true;
+    }
+  });
+
+  const el = document.getElementById('alerts');
+  if (hasAlert) {
+    el.innerHTML = `<div class="alert-banner">${alertsHtml}</div>`;
+  } else {
+    el.innerHTML = '';
+  }
 }
 
 function renderLessons() {
   const el = document.getElementById('lessons');
   if (!state.lessons.length) {
-    el.innerHTML = '<div class="empty">لا توجد دروس بعد<br><br>اضغط زر + لإضافة أول درس</div>';
+    el.innerHTML = '<div class="empty">لا توجد مواد بعد<br><br>اضغط زر + لإضافة أول مادة</div>';
     return;
   }
+  
   el.innerHTML = state.lessons.map(l => {
-    const paid = l.payments.reduce((a,p)=>a+p.amount,0);
-    const remaining = Math.max(0, l.totalSessions - l.usedSessions);
-    const due = Math.max(0, l.usedSessions*l.price - paid);
-    const pct = l.totalSessions ? Math.min(100, (l.usedSessions/l.totalSessions)*100) : 0;
-    const cls = remaining===0 ? 'done' : remaining<=2 ? 'low' : 'ok';
-    const lastPay = l.payments.length ? l.payments[l.payments.length-1] : null;
+    const remaining = l.totalSessions - l.attended;
+    const totalMonthPrice = l.totalSessions * l.price;
+    const due = Math.max(0, totalMonthPrice - l.paid);
+    const cls = remaining === 0 ? 'done' : remaining <= 2 ? 'low' : 'ok';
+    
+    // رسم دوائر الحصص
+    let circlesHtml = '';
+    for (let i = 0; i < l.totalSessions; i++) {
+      const isActive = i < l.attended ? 'active' : '';
+      circlesHtml += `<div class="circle ${isActive}" onclick="toggleSession(${l.id}, ${i})">${i+1}</div>`;
+    }
+
     return `
       <div class="card ${cls}">
         <div class="card-head">
-          <h3>${esc(l.name)}</h3>
+          <h3>${l.name}</h3>
           <button class="del" data-id="${l.id}">🗑️</button>
         </div>
-        <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
-        <div class="meta">${l.usedSessions} من ${l.totalSessions} حصة مستخدمة</div>
-        <div class="row">
-          <span class="badge ${cls}">${remaining===0?'انتهت الحصص':'متبقي '+remaining+' حصة'}</span>
-          <span class="price">${fmt(l.price)} / حصة</span>
+        
+        <div class="meta">
+          <span>اضغط على الدايرة أول ما تاخد الحصة:</span>
+          <span style="font-weight:bold; color:var(--primary)">${l.attended} / ${l.totalSessions}</span>
         </div>
+        
+        <div class="circles">${circlesHtml}</div>
+        
         <div class="pay">
-          <div>مدفوع: ${fmt(paid)}</div>
-          <div class="${due>0?'due':'paid'}">${due>0 ? '⚠️ مستحق: '+fmt(due) : '✓ مسدد بالكامل'}</div>
-          ${lastPay ? `<div class="last">آخر دفعة: ${new Date(lastPay.date).toLocaleDateString('ar-EG')}</div>` : '<div class="last">لم يتم الدفع بعد</div>'}
+          <div>إجمالي الشهر: <strong>${fmt(totalMonthPrice)}</strong> <span style="font-size:11px; color:#666">(${l.totalSessions} حصة × ${l.price})</span></div>
+          <div>المدفوع مقدم: <span class="paid">${fmt(l.paid)}</span></div>
+          <div class="${due>0?'due':'paid'}">${due>0 ? '⚠️ متبقي عليه: '+fmt(due) : '✓ الشهر مدفوع بالكامل'}</div>
         </div>
+        
         <div class="actions">
-          <button onclick="addSession(${l.id})">➕ حصة</button>
-          <button onclick="addPayment(${l.id})">💰 دفعة</button>
+          <button onclick="openPayModal(${l.id})">💰 إضافة دفعة</button>
           <button onclick="editLesson(${l.id})">✏️ تعديل</button>
         </div>
       </div>`;
   }).join('');
 }
 
-function addSession(id) {
+// دالة تدوس على الدايرة عشان تعلقها
+function toggleSession(id, index) {
   const l = state.lessons.find(x=>x.id===id);
   if (!l) return;
-  if (l.usedSessions >= l.totalSessions) {
-    if (!confirm('الحصص المتفق عليها انتهت. هل تريد إضافة حصة إضافية؟')) return;
-    l.totalSessions++;
+  // لو بتدوس على حصة متأخدة بالفعل، بيرجعها غير متأخدة (عشان لو غلطت)
+  if (index < l.attended) {
+    l.attended = index;
+  } else {
+    l.attended = index + 1;
   }
-  l.usedSessions++;
-  l.sessions = l.sessions || [];
-  l.sessions.push(new Date().toISOString());
   save(); render();
 }
 
-function addPayment(id) {
+function openPayModal(id) {
   const l = state.lessons.find(x=>x.id===id);
-  const paid = l.payments.reduce((a,p)=>a+p.amount,0);
-  const due = Math.max(0, l.usedSessions*l.price - paid);
-  const v = prompt(`دفعة لـ "${l.name}"\nالمستحق: ${due} ج.م\n\nأدخل المبلغ:`);
-  if (!v) return;
-  const n = parseFloat(v);
-  if (isNaN(n) || n<=0) return alert('مبلغ غير صحيح');
-  l.payments.push({ amount: n, date: new Date().toISOString() });
-  save(); render();
+  const totalMonthPrice = l.totalSessions * l.price;
+  const due = Math.max(0, totalMonthPrice - l.paid);
+  
+  document.getElementById('pId').value = id;
+  document.getElementById('pInfo').innerHTML = `مادة: <strong>${l.name}</strong><br>المطلوب للشهر: ${fmt(totalMonthPrice)}<br>فاضل تدفع: <strong style="color:var(--danger)">${fmt(due)}</strong>`;
+  document.getElementById('pAmount').value = due > 0 ? due : '';
+  
+  document.getElementById('payModal').classList.add('show');
 }
+
+document.getElementById('payForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = parseInt(document.getElementById('pId').value);
+  const amount = parseFloat(document.getElementById('pAmount').value);
+  const l = state.lessons.find(x=>x.id===id);
+  if (l && amount >= 0) {
+    l.paid += amount;
+    save(); render();
+    document.getElementById('payModal').classList.remove('show');
+  }
+});
 
 function editLesson(id) {
   const l = state.lessons.find(x=>x.id===id);
@@ -200,7 +264,7 @@ function editLesson(id) {
   document.getElementById('mName').value = l.name;
   document.getElementById('mTotal').value = l.totalSessions;
   document.getElementById('mPrice').value = l.price;
-  document.getElementById('modalTitle').textContent = 'تعديل الدرس';
+  document.getElementById('modalTitle').textContent = 'تعديل المادة';
   document.getElementById('modal').classList.add('show');
 }
 
@@ -209,7 +273,7 @@ function openAdd() {
   document.getElementById('mName').value = '';
   document.getElementById('mTotal').value = 8;
   document.getElementById('mPrice').value = 100;
-  document.getElementById('modalTitle').textContent = 'درس جديد';
+  document.getElementById('modalTitle').textContent = 'إضافة مادة جديدة';
   document.getElementById('modal').classList.add('show');
 }
 
@@ -219,27 +283,34 @@ document.getElementById('form').addEventListener('submit', e => {
   const name = document.getElementById('mName').value.trim();
   const total = parseInt(document.getElementById('mTotal').value);
   const price = parseFloat(document.getElementById('mPrice').value);
+  
   if (!name || !total || !price) return;
+  
   if (id) {
     const l = state.lessons.find(x=>x.id==id);
-    Object.assign(l, { name, totalSessions: total, price });
+    l.name = name;
+    l.totalSessions = total;
+    l.price = price;
+    if (l.attended > total) l.attended = total; // لو قللت عدد الحصص
   } else {
     state.lessons.push({
       id: Date.now(), name, totalSessions: total, price,
-      usedSessions: 0, payments: [], sessions: []
+      attended: 0, paid: 0
     });
   }
   save(); render();
   document.getElementById('modal').classList.remove('show');
 });
 
+// أزرار الغلق
 document.getElementById('addBtn').onclick = openAdd;
 document.getElementById('closeModal').onclick = () => document.getElementById('modal').classList.remove('show');
-document.getElementById('modal').onclick = e => { if (e.target.id==='modal') e.currentTarget.classList.remove('show'); };
+document.getElementById('closePayModal').onclick = () => document.getElementById('payModal').classList.remove('show');
+
 document.addEventListener('click', e => {
   if (e.target.classList.contains('del')) {
     const id = parseInt(e.target.dataset.id);
-    if (confirm('حذف هذا الدرس نهائيًا؟')) {
+    if (confirm('حذف هذه المادة نهائيًا؟')) {
       state.lessons = state.lessons.filter(x=>x.id!==id);
       save(); render();
     }
@@ -247,6 +318,7 @@ document.addEventListener('click', e => {
 });
 
 function render() {
+  renderAlerts();
   renderStats();
   renderLessons();
   document.getElementById('today').textContent =
@@ -254,7 +326,6 @@ function render() {
 }
 render();
 
-// تسجيل Service Worker عشان يشتغل أوفلاين
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error', err));
@@ -262,4 +333,4 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
-</html>
+  </html>
