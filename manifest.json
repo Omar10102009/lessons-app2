@@ -1,0 +1,17 @@
+{
+  "name": "منظم الدروس",
+  "short_name": "الدروس",
+  "description": "تطبيق لتنظيم الدروس ومتابعة الحصص والمدفوعات",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIiBmaWxsPSIjNGY0NmU1Ii8+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iOCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzAiIHI9IjgiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI3MCIgY3k9IjMwIiByPSI4IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTI1IDYwaDUwdjEwaC01MHoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
